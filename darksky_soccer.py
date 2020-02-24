@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import sqlite3
 import pymongo
-import dns
 
 def get_api_key(path):
     '''
@@ -139,8 +138,6 @@ def calculate_aggregate_stats_sqlite(match_stats_df, database):
 
       (SELECT Div, HomeTeam,
              SUM(CASE WHEN FTHG > FTAG THEN 1 ELSE 0 END) as h_win,
-             SUM(CASE WHEN FTHG = FTAG THEN 1 ELSE 0 END) as h_draw,
-             SUM(CASE WHEN FTHG < FTAG THEN 1 ELSE 0 END) as h_loss,
              SUM(CASE WHEN FTHG > FTAG AND rain == 1 THEN 1 ELSE 0 END) as h_rain_win,
              SUM(rain) as h_rain_games,
              SUM(FTHG) as h_goals_for,
@@ -191,6 +188,6 @@ def insert_to_atlas(atlas_user, atlas_key, cluster_name, collection_name, team_s
 
     result = collection.insert_many(team_stats,
                                     ordered=False)
-    print(f'len(result.inserted_ids) records inserted')
+    print(f'{len(result.inserted_ids)} records inserted')
     if return_ids:
         return result.inserted_ids
